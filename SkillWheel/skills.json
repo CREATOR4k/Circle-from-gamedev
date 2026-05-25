@@ -1,0 +1,16 @@
+[
+  {
+    "id": "rainbow_strike",
+    "name": "Радужный удар",
+    "css_class": "skill-rainbow-strike",
+    "description": "Наносит дополнительный урон стихиями.",
+    "required_skills": ["light_magic_1"]
+  },
+  {
+    "id": "ultimate_ability",
+    "name": "Абсолютное умение фракции",
+    "css_class": "skill-ultimate",
+    "description": "Уникальный ультимативный перк.",
+    "required_skills": ["rainbow_strike", "holy_charge"]
+  }
+]
