@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Debug Test</title>
+    <style>
+        body { font-family: Arial; background: #222; color: #eee; padding: 20px; }
+        .test { background: #333; padding: 15px; margin: 10px 0; border-radius: 5px; }
+        .success { color: #4CAF50; }
+        .error { color: #f44336; }
+        button { padding: 8px 16px; background: #4CAF50; color: white; border: none; border-radius: 4px; cursor: pointer; }
+    </style>
+</head>
+<body>
+    <h1>Debug Test for Skill Wheel</h1>
+
+    <div class="test" id="test1">
+        <h3>Testing Data Loading...</h3>
+    </div>
+
+    <div class="test" id="test2">
+        <h3>Testing Skill Data Structure...</h3>
+    </div>
+
+    <div class="test" id="test3">
+        <h3>Testing Info Panel Function...</h3>
+    </div>
+
+    <button onclick="runTests()">Run All Tests</button>
+
+    <script>
+        function addResult(elementId, message, isSuccess = true) {
+            const element = document.getElementById(elementId);
+            const span = document.createElement('div');
+            span.style.color = isSuccess ? '#4CAF50' : '#f44336';
+            span.textContent = message;
+            element.appendChild(span);
+        }
+
+        function runTests() {
+            // Clear previous results
+            for (let i = 1; i <= 3; i++) {
+                document.getElementById(`test${i}`).innerHTML = '<h3>' + document.getElementById(`test${i}`).querySelector('h3').textContent + '</h3>';
+            }
+
+            // Test 1: Check if data file loads
+            try {
+                if (typeof HOMM5_SKILL_DATA !== 'undefined') {
+                    addResult('test1', '✅ Skill data loaded successfully!');
+                    addResult('test1', `Found ${Object.keys(HOMM5_SKILL_DATA).length} classes`);
+                } else {
+                    addResult('test1', '❌ HOMM5_SKILL_DATA is not defined', false);
+                }
+            } catch (error) {
+                addResult('test1', `❌ Error: ${error.message}`, false);
+            }
+
+            // Test 2: Check skill structure
+            try {
+                if (HOMM5_SKILL_DATA && HOMM5_SKILL_DATA.warrior) {
+                    const firstSkill = HOMM5_SKILL_DATA.warrior.skills[0];
+                    addResult('test2', `✅ Found ${HOMM5_SKILL_DATA.warrior.skills.length} skills`);
+
+                    if (firstSkill.effects) {
+                        addResult('test2', `✅ Skill has effects: ${Object.keys(firstSkill.effects).length} effects`);
+                    } else {
+                        addResult('test2', '⚠️ First skill has no effects data', false);
+                    }
+
+                    if (firstSkill.stats) {
+                        addResult('test2', `✅ Skill has stats data`);
+                    } else {
+                        addResult('test2', '⚠️ First skill has no stats data', false);
+                    }
+                }
+            } catch (error) {
+                addResult('test2', `❌ Error: ${error.message}`, false);
+            }
+
+            // Test 3: Check info panel function
+            try {
+                // Mock the required elements
+                const mockTitle = { textContent: '' };
+                const mockType = { textContent: '' };
+                const mockDesc = { innerHTML: '' };
+
+                // Mock classData
+                const mockClassData = HOMM5_SKILL_DATA.warrior;
+                const mockSkill = mockClassData.skills[0];
+
+                // Test the function logic
+                if (mockSkill) {
+                    addResult('test3', `✅ Testing with skill: ${mockSkill.name}`);
+
+                    // Test description building
+                    let testDesc = `<strong>📜 Описание:</strong>\n${mockSkill.description}`;
+
+                    if (mockSkill.effects) {
+                        testDesc += `\n\n<strong>⚔️ Эффекты:</strong>`;
+                        for (const [effect, value] of Object.entries(mockSkill.effects)) {
+                            testDesc += `\n• ${effect}: +${value}%`;
+                        }
+                        addResult('test3', `✅ Effects processed: ${Object.keys(mockSkill.effects).length}`);
+                    }
+
+                    mockDesc.innerHTML = testDesc;
+                    addResult('test3', `✅ HTML description generated successfully`);
+                }
+            } catch (error) {
+                addResult('test3', `❌ Error: ${error.message}`, false);
+            }
+        }
+
+        // Load the data file
+        const script = document.createElement('script');
+        script.src = 'data/homm5_skills.js';
+        script.onload = function() {
+            addResult('test1', '✅ Data file loaded');
+            runTests();
+        };
+        script.onerror = function() {
+            addResult('test1', '❌ Failed to load data file', false);
+        };
+        document.head.appendChild(script);
+    </script>
+</body>
+</html>

@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Колесо навыков HOMM5</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+    <h1>⚔ Колесо навыков (Heroes of Might and Magic 5)</h1>
+
+    <div id="selector-row">
+      <label for="selector">Класс персонажа:</label>
+      <select id="selector"></select>
+      <div id="points-row">
+        <span>Очки навыков:</span>
+        <span id="points-val">15</span>
+        <button id="reset-btn" onclick="resetSkills()">Сбросить все</button>
+      </div>
+    </div>
+    <div id="wheel-area">
+         <!-- <div id="canvas-wrap"> -->
+           <canvas id="skillWheel" width="1000" height="1000"></canvas>
+          <!-- </div> -->
+          <div id="info-panel">
+            <div id="infoTitle">Выберите навык</div>
+              <div id="infoType">Наведите на навык для подробностей</div>
+                <div id="infoDesc">Изучайте навыки, чтобы открывать новые возможности. Навыки имеют зависимости - сначала нужно изучить базовые навыки, чтобы разблокировать продвинутые.</div>
+          </div>
+    </div>
+
+    <script src="data/homm5_skills.js"></script>
+    <script src="script.js"></script>
+</body>
+</html>

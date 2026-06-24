@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Simple Test</title>
+    <style>
+        body { font-family: Arial; background: #222; color: #eee; padding: 20px; }
+        .test { background: #333; padding: 15px; margin: 10px 0; border-radius: 5px; }
+        .success { color: #4CAF50; }
+        .error { color: #f44336; }
+    </style>
+</head>
+<body>
+    <h1>Simple HOMM5 Skill Wheel Test</h1>
+
+    <div class="test" id="test1">
+        <h3>Testing Data Loading...</h3>
+    </div>
+
+    <div class="test" id="test2">
+        <h3>Testing Canvas...</h3>
+    </div>
+
+    <div class="test" id="test3">
+        <h3>Testing Skill Data Structure...</h3>
+    </div>
+
+    <script>
+        // Test 1: Check if data file loads
+        document.getElementById('test1').innerHTML += '<p>Loading skill data...</p>';
+
+        try {
+            // This should work if the file is properly included
+            if (typeof HOMM5_SKILL_DATA !== 'undefined') {
+                document.getElementById('test1').innerHTML += '<p class="success">✅ Skill data loaded successfully!</p>';
+                document.getElementById('test1').innerHTML += `<p>Found ${Object.keys(HOMM5_SKILL_DATA).length} classes</p>`;
+            } else {
+                document.getElementById('test1').innerHTML += '<p class="error">❌ HOMM5_SKILL_DATA is not defined</p>';
+            }
+        } catch (error) {
+            document.getElementById('test1').innerHTML += `<p class="error">❌ Error: ${error.message}</p>`;
+        }
+
+        // Test 2: Check canvas
+        document.getElementById('test2').innerHTML += '<p>Testing canvas...</p>';
+
+        try {
+            const canvas = document.createElement('canvas');
+            if (canvas.getContext) {
+                document.getElementById('test2').innerHTML += '<p class="success">✅ Canvas is supported</p>';
+            } else {
+                document.getElementById('test2').innerHTML += '<p class="error">❌ Canvas not supported</p>';
+            }
+        } catch (error) {
+            document.getElementById('test2').innerHTML += `<p class="error">❌ Error: ${error.message}</p>`;
+        }
+
+        // Test 3: Check skill structure
+        document.getElementById('test3').innerHTML += '<p>Testing skill structure...</p>';
+
+        try {
+            if (typeof HOMM5_SKILL_DATA !== 'undefined' && HOMM5_SKILL_DATA.warrior) {
+                const warriorSkills = HOMM5_SKILL_DATA.warrior.skills;
+                document.getElementById('test3').innerHTML += `<p class="success">✅ Found ${warriorSkills.length} warrior skills</p>`;
+
+                // Test first skill
+                const firstSkill = warriorSkills[0];
+                if (firstSkill.id && firstSkill.name && firstSkill.prerequisites !== undefined) {
+                    document.getElementById('test3').innerHTML += `<p class="success">✅ Skill structure is valid</p>`;
+                    document.getElementById('test3').innerHTML += `<p>First skill: ${firstSkill.name} (${firstSkill.id})</p>`;
+                } else {
+                    document.getElementById('test3').innerHTML += '<p class="error">❌ Invalid skill structure</p>';
+                }
+            } else {
+                document.getElementById('test3').innerHTML += '<p class="error">❌ No warrior data found</p>';
+            }
+        } catch (error) {
+            document.getElementById('test3').innerHTML += `<p class="error">❌ Error: ${error.message}</p>`;
+        }
+
+        // Final message
+        setTimeout(() => {
+            const final = document.createElement('div');
+            final.className = 'test';
+            final.innerHTML = `
+                <h3>Test Results</h3>
+                <p>If all tests show ✅, then open <strong>index.html</strong> to see the full implementation.</p>
+                <p>If there are ❌ errors, check the console for details.</p>
+            `;
+            document.body.appendChild(final);
+        }, 100);
+    </script>
+</body>
+</html>
